@@ -3,12 +3,12 @@ import {logger} from '../../services/logger.service.js'
 import { ObjectId } from 'mongodb'
 
 export const userService = {
-	add, // Create (Signup)
-	getById, // Read (Profile page)
-	update, // Update (Edit profile)
-	remove, // Delete (remove user)
-	query, // List (of users)
-	getByFullname, // Used for Login
+	add,
+	getById,
+	update,
+	remove,
+	query,
+	getByFullname,
     getByUsername
 }
 
@@ -81,24 +81,6 @@ async function update(user) {
         throw err
     }
 }
-
-// async function add(user) {
-// 	try {
-// 		const userToAdd = {
-// 			fullname: user.fullname,
-// 			instrument: user.instrument,
-//             username: user.username,
-// 			password: user.password,
-// 			isAdmin: user.isAdmin,
-// 		}
-// 		const collection = await dbService.getCollection('users')
-// 		await collection.insertOne(userToAdd)
-// 		return userToAdd
-// 	} catch (err) {
-// 		logger.error('cannot add user', err)
-// 		throw err
-// 	}
-// }
 
 async function add(user) {
     console.log(user)

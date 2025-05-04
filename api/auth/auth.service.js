@@ -13,15 +13,15 @@ export const authService = {
 	validateToken,
 }
 
-async function login(fullname, password) {
-	logger.debug(`auth.service - login with full name: ${fullname}`)
+async function login(username, password) {
+	logger.debug(`auth.service - login with username: ${username}`)
 
-	const user = await userService.getByFullname(fullname)
-	if (!user) return Promise.reject('Invalid full name or password')
+	const user = await userService.getByUsername(username)
+	if (!user) return Promise.reject('Invalid username or password')
 
 	// TODO: un-comment for real login
 	const match = await bcrypt.compare(password, user.password)
-	if (!match) return Promise.reject('Invalid full name or password')
+	if (!match) return Promise.reject('Invalid username or password')
 
 	delete user.password
 	user._id = user._id.toString()
@@ -34,8 +34,8 @@ async function signup({ fullname, instrument, username, password, isAdmin }) {
 	logger.debug(`auth.service - signup with full name: ${fullname}, fullname: ${fullname}`)
 	if (!instrument || !password || !fullname || !username) return Promise.reject('Missing required signup information')
 
-	const userExist = await userService.getByFullname(fullname)
-	if (userExist) return Promise.reject('full name already taken')
+	const userExist = await userService.getByUsername(username)
+	if (userExist) return Promise.reject('username already taken')
 
 	const hash = await bcrypt.hash(password, saltRounds)
 	return userService.add({ instrument, password: hash, fullname, username, isAdmin })
@@ -60,49 +60,3 @@ function validateToken(loginToken) {
 	}
 	return null
 }
-
-
-
-
-// import { userService } from '../user/user.service.js'
-// import bcrypt from 'bcrypt'
-
-// export const authService = {
-//     login,
-//     signup,
-// }
-
-// async function login(username, password) {
-//     const user = await userService.getByUsername(username)
-//     if (!user) return null
-
-//     const match = await bcrypt.compare(password, user.password)
-//     if (!match) return null
-
-//     delete user.password
-//     return user
-// }
-// async function signup(userData) {
-//     const { username, fullname, password, instrument } = userData
-// 	console.log(userData)
-
-//     if (!username || !fullname || !password || !instrument) {
-//         throw new Error('Missing required signup info')
-//     }
-
-//     const saltRounds = 10
-//     const hashedPassword = await bcrypt.hash(password, saltRounds)
-
-//     const newUser = await userService.add({
-//         username,
-//         fullname,
-//         instrument,
-//         password: hashedPassword,
-//         isAdmin: false
-//     })
-
-//     if (newUser.password) delete newUser.password
-
-//     return newUser
-// }
-
