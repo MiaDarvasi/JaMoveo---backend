@@ -107,7 +107,7 @@ async function add(user) {
 
 
 async function getByUsername(username) {
-    console.log(username)
+    // console.log(username)
     try {
         const collection = await dbService.getCollection('users')
         const user = await collection.findOne({ username })
