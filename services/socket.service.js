@@ -36,26 +36,6 @@ export function setupSocketAPI(http) {
             logger.info(`Live session ended by socket [id: ${socket.id}]`)
             gIo.emit('end-live-session')
         })
-
-        socket.on('user-watch', userId => {
-            logger.info(`Socket watching user: ${userId}`)
-            socket.join('watching:' + userId)
-        })
-
-        socket.on('chat-set-topic', topic => {
-            if (socket.myTopic === topic) return
-            if (socket.myTopic) {
-                socket.leave(socket.myTopic)
-                logger.info(`Socket left topic ${socket.myTopic}`)
-            }
-            socket.join(topic)
-            socket.myTopic = topic
-        })
-
-        socket.on('chat-send-msg', msg => {
-            logger.info(`Chat message in topic ${socket.myTopic}`)
-            gIo.to(socket.myTopic).emit('chat-add-msg', msg)
-        })
     })
 }
 
